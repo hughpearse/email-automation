@@ -66,8 +66,18 @@ public class SmtpServerConfiguration {
                 		while (matSub.find()) {
                 			String[] subjectArr = matSub.group().split(":");
                 			String subject = String.join(":", Arrays.copyOfRange(subjectArr, 1, subjectArr.length));
+                			subject = subject.replaceFirst(" ", "");
                     		aEmail.setSubjectText(subject);
                     		log.info("Subject: {}", subject);
+                		}
+                		
+                		Pattern patBod = Pattern.compile("\\r\\n\\r\\n(.*)");
+                		Matcher matBod = patBod.matcher(rawEmail);
+                		while (matBod.find()) {
+                			String body = matBod.group();
+                			body = body.replaceFirst("\\r\\n\\r\\n", "");
+                    		aEmail.setBodyText(body);
+                    		log.info("Body: {}", body);
                 		}
                 		
                 		byte[] encodedBytes = Base64.getEncoder().encode(rawEmail.getBytes());
