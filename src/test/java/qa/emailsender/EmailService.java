@@ -1,4 +1,4 @@
-package myapplication.emailsender;
+package qa.emailsender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,12 +15,12 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendMail(String toEmail, String subject, String message) {
+    public void sendMail(String fromAddress, String toAddress, String subject, String message) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(toEmail);
+        mailMessage.setTo(toAddress);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
-        mailMessage.setFrom("admin@admin.com");
+        mailMessage.setFrom(fromAddress);
         javaMailSender.send(mailMessage);
     }
 }

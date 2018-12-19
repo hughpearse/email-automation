@@ -1,4 +1,4 @@
-package myapplication.rest;
+package myapplication.mailserver.rest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,4 +34,11 @@ public class EmailController {
     	log.info("processing /search for: fromAddress={}", emailAddress);
     	return repository.findByFromContains(emailAddress);
     }
+    
+    @RequestMapping("/inbox")
+    public Iterable<Email> findbyInbox(@RequestParam(value="emailAddress") String emailAddress){
+    	log.info("processing /inbox for: emailAddress={}", emailAddress);
+    	return repository.listInboxForUser(emailAddress);
+    }
+    
 }

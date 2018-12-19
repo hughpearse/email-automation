@@ -19,7 +19,13 @@ import myapplication.mailserver.repo.EmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import java.util.Base64;
 
 @Configuration
 @EnableConfigurationProperties(SmtpServerProperties.class)
@@ -40,29 +46,54 @@ public class SmtpServerConfiguration {
         return new MessageHook() {
             @Override
             public HookResult onMessage(SMTPSession smtpSession, MailEnvelope mailEnvelope) {
-            	Email aEmail = new Email(mailEnvelope.getSender().toString(), mailEnvelope.getRecipients().toString());
-            	try {
-					log.info(IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8));
-					/*
-Received: from localhost (EHLO localhost) ([127.0.0.1])
-          by hughs-mbp.mul.ie.ibm.com (Spring Boot SMTP Server) with ESMTP ID -1533514914
-          for <kiranreddy2004@gmail.com>;
-          Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
-Date: Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
-From: admin@admin.com
-To: kiranreddy2004@gmail.com
-Message-ID: <1535660266.0.1545238551385@localhost>
-Subject: Test subject
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Test mail
-					 */
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            	repository.save(aEmail);
+            	String[] inboxArr = mailEnvelope.getRecipients().toString().replace("[", "").replaceAll("]", "").split(",");
+            	
+            	for (String inboxName : inboxArr) {
+            		String from = mailEnvelope.getSender().toString();
+            		String to = mailEnvelope.getRecipients().toString();
+            		Email aEmail = new Email(from, to, inboxName);
+                	
+                	SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss");
+                	Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                	aEmail.setTimestampRecieved(sdf.format(timestamp));
+                	
+                	try {
+                		String rawEmail = IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8);
+                		
+                		/*
+                		Pattern patSub = Pattern.compile(".*Subject:\\s*(.*)");
+                		Matcher matSub = patSub.matcher(rawEmail);
+                		String subject = matSub.group(0);
+                		aEmail.setSubjectText(subject);
+                		log.info("Subject: {}", subject);
+                		*/
+                		
+                		byte[] encodedBytes = Base64.getEncoder().encode(rawEmail.getBytes());
+                		String base64RawEmail = new String(encodedBytes);
+                		aEmail.setRawEmail(base64RawEmail);
+    					log.info("Base64 email: {}", base64RawEmail);
+    					/*
+    					Received: from localhost (EHLO localhost) ([127.0.0.1])
+    					          by hughs-mbp.mul.ie.ibm.com (Spring Boot SMTP Server) with ESMTP ID -1533514914
+    					          for <kiranreddy2004@gmail.com>;
+    					          Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
+    					Date: Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
+    					From: admin@admin.com
+    					To: kiranreddy2004@gmail.com
+    					Message-ID: <1535660266.0.1545238551385@localhost>
+    					Subject: Test subject
+    					MIME-Version: 1.0
+    					Content-Type: text/plain; charset=UTF-8
+    					Content-Transfer-Encoding: 7bit
+    					
+    					Test mail
+    					 */
+    				} catch (IOException e) {
+    					e.printStackTrace();
+    				}
+                	repository.save(aEmail);
+            	}//end for
+            	
                 log.info("mail from={} to={} size={}", mailEnvelope.getSender(), mailEnvelope.getRecipients(), mailEnvelope.getSize());
                 return HookResult.OK;
             }

@@ -20,8 +20,8 @@ public class EmailRepositoryImpl implements EmailRepositoryCustom {
 	@Override
 	public Iterable<Email> findByToContains(String emailAddress) {
 		log.info("querying database for: toAddress={}", emailAddress);
-		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.toAddress LIKE ?", Email.class);
-		query.setParameter(1, emailAddress + "%");
+		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.to_Address LIKE :emailAddress", Email.class);
+		query.setParameter("emailAddress", "%"+emailAddress+"%");
 		List<?> results = query.getResultList();
 		return results.isEmpty() ? null : (Iterable<Email>)results;
 	}
@@ -29,8 +29,17 @@ public class EmailRepositoryImpl implements EmailRepositoryCustom {
 	@Override
 	public Iterable<Email> findByFromContains(String emailAddress) {
 		log.info("querying database for: fromAddress={}", emailAddress);
-		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.fromAddress LIKE ?", Email.class);
-		query.setParameter(1, emailAddress + "%");
+		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.from_Address = :emailAddress", Email.class);
+		query.setParameter(1, emailAddress);
+		List<?> results = query.getResultList();
+		return results.isEmpty() ? null : (Iterable<Email>)results;
+	}
+	
+	@Override
+	public Iterable<Email> listInboxForUser(String emailAddress) {
+		log.info("querying database for: inboxName={}", emailAddress);
+		Query query = em.createNativeQuery("SELECT * FROM Email WHERE inbox_Name = :emailAddress", Email.class);
+		query.setParameter("emailAddress", emailAddress);
 		List<?> results = query.getResultList();
 		return results.isEmpty() ? null : (Iterable<Email>)results;
 	}

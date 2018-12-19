@@ -1,14 +1,16 @@
-package myapplication;
+package qa;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import myapplication.emailsender.EmailService;
+
+import qa.emailsender.Application;
+import qa.emailsender.EmailService;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = Application.class)
 public class EmailsenderApplicationTests {
 
 
@@ -18,7 +20,8 @@ public class EmailsenderApplicationTests {
 
 	@Test
 	public void testEmail(){
-		emailService.sendMail("kiranreddy2004@gmail.com","Test subject","Test mail");
+		String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+		emailService.sendMail("alice@example.com", "bob@example.com","Test subject",message);
 	}
 
 }

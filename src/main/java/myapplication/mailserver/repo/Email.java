@@ -25,10 +25,14 @@ public class Email implements Serializable {
 	@NotNull
 	@Column(length = 100, unique = false, nullable = false)
 	private String fromAddress;
-	@Size(max = 100)
+	@Size(max = 1000)
 	@NotNull
-	@Column(length = 100, unique = false, nullable = false)
+	@Column(length = 1000, unique = false, nullable = false)
 	private String toAddress;
+	@Size(max = 256)
+	@NotNull
+	@Column(length = 256, unique = false, nullable = false)
+	private String inboxName;
 	
 	@Size(max = 100)
 	@Column(length = 100, unique = false)
@@ -39,18 +43,22 @@ public class Email implements Serializable {
 	@Size(max = 100)
 	@Column(length = 100, unique = false)
 	private String subjectText;
-	@Size(max = 100)
+	@Size(max = 1000)
 	@Column(length = 1000, unique = false)
 	private String bodyText;
 	@Size(max = 100)
 	@Column(length = 100, unique = false)
 	private String timestampRecieved;
+	@Size(max = 2000)
+	@Column(length = 2000, unique = false)
+	private String rawEmail;
 	
 	protected Email() {}
 	
-	public Email(String from, String to) {
+	public Email(String from, String to, String inboxName) {
 		setFromAddress(from);
 		setToAddress(to);
+		setInboxName(inboxName);
 	}
 
 	public long getId() {
@@ -75,6 +83,15 @@ public class Email implements Serializable {
 
 	public void setToAddress(String toAddress) {
 		this.toAddress = toAddress;
+	}
+	
+
+	public String getInboxName() {
+		return inboxName;
+	}
+
+	public void setInboxName(String inboxName) {
+		this.inboxName = inboxName;
 	}
 
 	public String getCcAddressList() {
@@ -116,7 +133,13 @@ public class Email implements Serializable {
 	public void setTimestampRecieved(String timestampRecieved) {
 		this.timestampRecieved = timestampRecieved;
 	}
-	
-	
+
+	public String getRawEmail() {
+		return rawEmail;
+	}
+
+	public void setRawEmail(String rawEmail) {
+		this.rawEmail = rawEmail;
+	}
 	
 }
