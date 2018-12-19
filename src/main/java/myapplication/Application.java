@@ -5,7 +5,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-@ComponentScan(basePackages={"myapplication.mailserver", "myapplication.emailsender"})
+@ComponentScan(basePackages={
+		"myapplication.mailserver", 
+		"myapplication.emailsender",
+		"myapplication.repo",
+		"myapplication.rest"})
 @EnableJpaRepositories
 public class Application {
     public static void main(String[] args) {

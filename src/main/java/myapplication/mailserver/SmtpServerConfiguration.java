@@ -11,6 +11,11 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import myapplication.mailserver.repo.Email;
+import myapplication.mailserver.repo.EmailRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Collection;
 
 @Configuration
@@ -18,6 +23,9 @@ import java.util.Collection;
 public class SmtpServerConfiguration {
 	
 	private static final Logger log = LoggerFactory.getLogger(SmtpServerConfiguration.class);
+	
+	@Autowired
+	EmailRepository repository;
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public SmtpServer smtpServer(SmtpServerProperties properties, Collection<ProtocolHandler> handlers) {
@@ -29,6 +37,8 @@ public class SmtpServerConfiguration {
         return new MessageHook() {
             @Override
             public HookResult onMessage(SMTPSession smtpSession, MailEnvelope mailEnvelope) {
+            	Email aEmail = new Email(mailEnvelope.getSender().toString(), mailEnvelope.getRecipients().toString());
+            	repository.save(aEmail);
                 log.info("mail from={} to={} size={}", mailEnvelope.getSender(), mailEnvelope.getRecipients(), mailEnvelope.getSize());
                 return HookResult.OK;
             }
