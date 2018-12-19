@@ -1,6 +1,7 @@
 package myapplication.mailserver;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.james.protocols.api.handler.ProtocolHandler;
 import org.apache.james.protocols.smtp.MailEnvelope;
 import org.apache.james.protocols.smtp.SMTPSession;
@@ -13,9 +14,10 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Collection;
 
 @Configuration
-@Slf4j
 @EnableConfigurationProperties(SmtpServerProperties.class)
 public class SmtpServerConfiguration {
+	
+	private static final Logger log = LoggerFactory.getLogger(SmtpServerConfiguration.class);
 
     @Bean(initMethod = "start", destroyMethod = "stop")
     public SmtpServer smtpServer(SmtpServerProperties properties, Collection<ProtocolHandler> handlers) {

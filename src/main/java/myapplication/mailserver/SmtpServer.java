@@ -1,6 +1,7 @@
 package myapplication.mailserver;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.james.metrics.api.NoopMetricFactory;
 import org.apache.james.protocols.api.Protocol;
 import org.apache.james.protocols.api.handler.ProtocolHandler;
@@ -14,8 +15,9 @@ import org.springframework.lang.NonNull;
 import java.net.InetSocketAddress;
 import java.util.Collection;
 
-@Slf4j
 public class SmtpServer {
+	
+	private static final Logger log = LoggerFactory.getLogger(SmtpServer.class);
 
     private final SmtpServerProperties properties;
 
