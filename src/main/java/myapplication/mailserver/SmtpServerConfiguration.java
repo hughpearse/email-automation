@@ -43,6 +43,22 @@ public class SmtpServerConfiguration {
             	Email aEmail = new Email(mailEnvelope.getSender().toString(), mailEnvelope.getRecipients().toString());
             	try {
 					log.info(IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8));
+					/*
+Received: from localhost (EHLO localhost) ([127.0.0.1])
+          by hughs-mbp.mul.ie.ibm.com (Spring Boot SMTP Server) with ESMTP ID -1533514914
+          for <kiranreddy2004@gmail.com>;
+          Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
+Date: Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
+From: admin@admin.com
+To: kiranreddy2004@gmail.com
+Message-ID: <1535660266.0.1545238551385@localhost>
+Subject: Test subject
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Test mail
+					 */
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
