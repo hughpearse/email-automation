@@ -2,6 +2,8 @@ package myapplication.mailserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.apache.james.protocols.api.handler.ProtocolHandler;
 import org.apache.james.protocols.smtp.MailEnvelope;
 import org.apache.james.protocols.smtp.SMTPSession;
@@ -16,6 +18,7 @@ import myapplication.mailserver.repo.EmailRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @Configuration
@@ -38,6 +41,11 @@ public class SmtpServerConfiguration {
             @Override
             public HookResult onMessage(SMTPSession smtpSession, MailEnvelope mailEnvelope) {
             	Email aEmail = new Email(mailEnvelope.getSender().toString(), mailEnvelope.getRecipients().toString());
+            	try {
+					log.info(IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
             	repository.save(aEmail);
                 log.info("mail from={} to={} size={}", mailEnvelope.getSender(), mailEnvelope.getRecipients(), mailEnvelope.getSize());
                 return HookResult.OK;
