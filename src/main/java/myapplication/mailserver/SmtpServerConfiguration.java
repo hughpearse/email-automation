@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+import java.util.Arrays;
 import java.util.Base64;
 
 @Configuration
@@ -60,13 +60,15 @@ public class SmtpServerConfiguration {
                 	try {
                 		String rawEmail = IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8);
                 		
-                		/*
+                		
                 		Pattern patSub = Pattern.compile(".*Subject:\\s*(.*)");
                 		Matcher matSub = patSub.matcher(rawEmail);
-                		String subject = matSub.group(0);
-                		aEmail.setSubjectText(subject);
-                		log.info("Subject: {}", subject);
-                		*/
+                		while (matSub.find()) {
+                			String[] subjectArr = matSub.group().split(":");
+                			String subject = String.join(":", Arrays.copyOfRange(subjectArr, 1, subjectArr.length));
+                    		aEmail.setSubjectText(subject);
+                    		log.info("Subject: {}", subject);
+                		}
                 		
                 		byte[] encodedBytes = Base64.getEncoder().encode(rawEmail.getBytes());
                 		String base64RawEmail = new String(encodedBytes);
