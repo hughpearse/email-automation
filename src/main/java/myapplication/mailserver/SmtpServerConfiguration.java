@@ -80,6 +80,9 @@ public class SmtpServerConfiguration {
                     		log.info("Body: {}", body);
                 		}
                 		
+                		aEmail.setBccAddressList("");
+                		aEmail.setCcAddressList("");
+                		
                 		byte[] encodedBytes = Base64.getEncoder().encode(rawEmail.getBytes());
                 		String base64RawEmail = new String(encodedBytes);
                 		aEmail.setRawEmail(base64RawEmail);

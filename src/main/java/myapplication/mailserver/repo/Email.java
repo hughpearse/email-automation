@@ -19,7 +19,7 @@ public class Email implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	@Size(max = 100)
 	@NotNull
@@ -52,6 +52,8 @@ public class Email implements Serializable {
 	@Size(max = 2000)
 	@Column(length = 2000, unique = false)
 	private String rawEmail;
+	@NotNull
+	Boolean isUnread;
 	
 	protected Email() {}
 	
@@ -59,13 +61,14 @@ public class Email implements Serializable {
 		setFromAddress(from);
 		setToAddress(to);
 		setInboxName(inboxName);
+		setIsUnread(true);
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -140,6 +143,14 @@ public class Email implements Serializable {
 
 	public void setRawEmail(String rawEmail) {
 		this.rawEmail = rawEmail;
+	}
+
+	public Boolean getIsUnread() {
+		return isUnread;
+	}
+
+	public void setIsUnread(Boolean isUnread) {
+		this.isUnread = isUnread;
 	}
 	
 }

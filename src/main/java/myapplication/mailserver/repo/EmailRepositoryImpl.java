@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class EmailRepositoryImpl implements EmailRepositoryCustom {
@@ -18,29 +19,21 @@ public class EmailRepositoryImpl implements EmailRepositoryCustom {
 	private static final Logger log = LoggerFactory.getLogger(EmailRepositoryImpl.class);
 	
 	@Override
-	public Iterable<Email> findByToContains(String emailAddress) {
-		log.info("querying database for: toAddress={}", emailAddress);
-		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.to_Address LIKE :emailAddress", Email.class);
-		query.setParameter("emailAddress", "%"+emailAddress+"%");
-		List<?> results = query.getResultList();
-		return results.isEmpty() ? null : (Iterable<Email>)results;
-	}
-	
-	@Override
-	public Iterable<Email> findByFromContains(String emailAddress) {
-		log.info("querying database for: fromAddress={}", emailAddress);
-		Query query = em.createNativeQuery("SELECT * FROM Email WHERE Email.from_Address = :emailAddress", Email.class);
-		query.setParameter(1, emailAddress);
-		List<?> results = query.getResultList();
-		return results.isEmpty() ? null : (Iterable<Email>)results;
-	}
-	
-	@Override
-	public Iterable<Email> listInboxForUser(String emailAddress) {
+	public Iterable<Long> listInboxForUser(String emailAddress) {
 		log.info("querying database for: inboxName={}", emailAddress);
-		Query query = em.createNativeQuery("SELECT * FROM Email WHERE inbox_Name = :emailAddress", Email.class);
-		query.setParameter("emailAddress", emailAddress);
+		Query query = em.createNativeQuery("SELECT id FROM Email WHERE inbox_Name = ?1 and is_Unread = ?2");
+		query.setParameter(1, emailAddress);
+		query.setParameter(2, true);
 		List<?> results = query.getResultList();
-		return results.isEmpty() ? null : (Iterable<Email>)results;
+		return results.isEmpty() ? null : (Iterable<Long>)results;
+	}
+	
+	@Override
+	public Email readEmailByID(long id) {
+		log.info("querying database for: id={}", id);
+		Query query = em.createNativeQuery("SELECT * FROM Email WHERE id = :id", Email.class);
+		query.setParameter("id", id);
+		Email result = (Email) query.getSingleResult();
+		return result.getId() != id ? null : result;
 	}
 }

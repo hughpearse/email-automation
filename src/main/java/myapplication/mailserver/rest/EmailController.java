@@ -23,22 +23,19 @@ public class EmailController {
         return repository.findAll();
     }
     
-    @RequestMapping("/searchByRecepient")
-    public Iterable<Email> findbyto(@RequestParam(value="toAddress") String emailAddress){
-    	log.info("processing /search for: toAddress={}", emailAddress);
-    	return repository.findByToContains(emailAddress);
-    }
-    
-    @RequestMapping("/searchBySender")
-    public Iterable<Email> findbyfrom(@RequestParam(value="fromAddress") String emailAddress){
-    	log.info("processing /search for: fromAddress={}", emailAddress);
-    	return repository.findByFromContains(emailAddress);
-    }
-    
     @RequestMapping("/inbox")
-    public Iterable<Email> findbyInbox(@RequestParam(value="emailAddress") String emailAddress){
+    public Iterable<Long> findbyInbox(@RequestParam(value="emailAddress") String emailAddress){
     	log.info("processing /inbox for: emailAddress={}", emailAddress);
     	return repository.listInboxForUser(emailAddress);
+    }
+    
+    @RequestMapping("/open")
+    public Email openEmailByID(@RequestParam(value="id") long id){
+    	log.info("processing /open email: id={}", id);
+    	Email anEmail = repository.readEmailByID(id);
+    	anEmail.setIsUnread(false);
+		repository.save(anEmail);
+		return anEmail;
     }
     
 }
