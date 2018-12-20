@@ -71,9 +71,13 @@ public class EmailController {
     @RequestMapping("/inbox/search")
     public List<Email> findbyInbox(
     		@RequestParam(value="emailAddress") String emailAddress,
-    		@RequestParam(value="query") String query
+    		@RequestParam(value="query") String query,
+    		@RequestParam(value="page", required=false) Optional<Integer> pageOpt,
+    		@RequestParam(value="limit", required=false) Optional<Integer> limitOpt
     		){
     	log.info("processing /inbox/search for: query={}", query);
-    	return repository.search(query, emailAddress);
+    	Integer page = pageOpt.orElse(0);
+    	Integer limit = limitOpt.orElse(10);
+    	return repository.search(query, emailAddress, page, limit);
     }
 }
