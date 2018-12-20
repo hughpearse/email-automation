@@ -1,6 +1,7 @@
 package myapplication.mailserver.repo;
 
+import java.util.List;
 
 public interface EmailRepositoryCustom {
-	//List<Person> search(String text);
+	List<Email> search(String query, String emailAddress);
 }

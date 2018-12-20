@@ -1,17 +1,16 @@
 package myapplication.mailserver.repo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
+import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 //http://blog.netgloo.com/2014/11/23/spring-boot-and-hibernate-search-integration/
 //https://tech.willhaben.at/how-to-add-full-text-search-and-faceting-to-any-database-511eea4a6c6
@@ -26,5 +25,24 @@ public class EmailRepositoryImpl implements EmailRepositoryCustom {
 	
 	private static final Logger log = LoggerFactory.getLogger(EmailRepositoryImpl.class);
 	
+	public List<Email> search(String queryStr, String emailAddress) {
+		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search.getFullTextEntityManager(em);
+		QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(Email.class).get();
+		org.apache.lucene.search.Query query = queryBuilder.keyword().onFields("subjectText", "bodyText", "fromAddress").matching(queryStr).createQuery();
+		org.hibernate.search.jpa.FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(query, Email.class);
+		
+		@SuppressWarnings("unchecked")
+        List results = jpaQuery.<Email>getResultList();
+        if (results == null) {
+            return new ArrayList();
+        }
+        return results;
+		
+//		log.info("querying database for: query={}", queryStr);
+//		Query query = em.createNativeQuery("SELECT e FROM Email as e WHERE inbox_Name = ?1", EmailSummarySubsetProjection.class);
+//		query.setParameter(1, emailAddress);
+//		List<?> results = query.getResultList();
+//		return results.isEmpty() ? null : (Page<EmailSummarySubsetProjection>)results;
+	}
 
 }

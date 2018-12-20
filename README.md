@@ -34,3 +34,8 @@ Delete email
 ```bash
 foo@bar:~$ http://localhost:8080/email/delete?id=1
 ```
+
+Full-text search subject/body/fromAddress
+```bash
+foo@bar:~$ localhost:8080/email/inbox/search?emailAddress=bob@example.com&query=lorem
+```

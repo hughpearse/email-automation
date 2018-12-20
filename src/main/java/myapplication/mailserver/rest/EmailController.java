@@ -1,4 +1,5 @@
 package myapplication.mailserver.rest;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -65,5 +66,14 @@ public class EmailController {
     	if(anEmail.isPresent()) {
     		repository.deleteById(id);
     	}
+    }
+    
+    @RequestMapping("/inbox/search")
+    public List<Email> findbyInbox(
+    		@RequestParam(value="emailAddress") String emailAddress,
+    		@RequestParam(value="query") String query
+    		){
+    	log.info("processing /inbox/search for: query={}", query);
+    	return repository.search(query, emailAddress);
     }
 }
