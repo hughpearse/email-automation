@@ -11,19 +11,30 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.SortableField;
+import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.TermVector;
+
 @Entity
 @Table(name = "Email")
+@Indexed
 public class Email implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@SortableField
 	private Long id;
 
 	@Size(max = 100)
 	@NotNull
 	@Column(length = 100, unique = false, nullable = false)
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	private String fromAddress;
 	@Size(max = 1000)
 	@NotNull
@@ -32,6 +43,7 @@ public class Email implements Serializable {
 	@Size(max = 256)
 	@NotNull
 	@Column(length = 256, unique = false, nullable = false)
+	@Field(index=Index.YES, analyze=Analyze.NO, store=Store.NO)
 	private String inboxName;
 	
 	@Size(max = 100)
@@ -42,9 +54,11 @@ public class Email implements Serializable {
 	private String bccAddressList;
 	@Size(max = 100)
 	@Column(length = 100, unique = false)
+	@Field(termVector = TermVector.YES)
 	private String subjectText;
 	@Size(max = 1000)
 	@Column(length = 1000, unique = false)
+	@Field(termVector = TermVector.YES)
 	private String bodyText;
 	@Size(max = 100)
 	@Column(length = 100, unique = false)

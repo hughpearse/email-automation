@@ -20,9 +20,9 @@ In another terminal send yourself some sample emails
 foo@bar:~$ ./gradlew --rerun-tasks test
 ```
 
-Check an inbox for unopened email (returns list of email id's)
+Check an inbox for unopened email
 ```bash
-foo@bar:~$ curl http://localhost:8080/email/inbox?emailAddress=bob@example.com
+foo@bar:~$ curl http://localhost:8080/email/inbox?emailAddress=bob@example.com&limit=2&sort=DESC&page=0
 ```
 
 Open an email in an inbox using an email id (marks as read)
@@ -30,7 +30,7 @@ Open an email in an inbox using an email id (marks as read)
 foo@bar:~$ http://localhost:8080/email/open?id=1
 ```
 
-Check all emails
+Delete email
 ```bash
-foo@bar:~$ curl http://localhost:8080/email/all
+foo@bar:~$ http://localhost:8080/email/delete?id=1
 ```
