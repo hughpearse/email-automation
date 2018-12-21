@@ -20,12 +20,12 @@ In another terminal send yourself some sample emails
 foo@bar:~$ ./gradlew --rerun-tasks test
 ```
 
-Check an inbox for unopened email
+Check an inbox (paginated)
 ```bash
 foo@bar:~$ curl http://localhost:8080/email/inbox?emailAddress=bob@example.com&limit=2&sort=DESC&page=0
 ```
 
-Open an email in an inbox using an email id (marks as read)
+Open an email using an email id (marks as read)
 ```bash
 foo@bar:~$ curl http://localhost:8080/email/open?id=1
 ```
@@ -35,7 +35,7 @@ Delete email
 foo@bar:~$ curl http://localhost:8080/email/delete?id=1
 ```
 
-Full-text search subject/body/fromAddress
+Full-text search subject/body/fromAddress in an inbox (paginated)
 ```bash
 foo@bar:~$ curl http://localhost:8080/email/inbox/search?emailAddress=bob@example.com&query=lorem&limit=2&page=0
 ```
