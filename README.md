@@ -27,15 +27,15 @@ foo@bar:~$ curl http://localhost:8080/email/inbox?emailAddress=bob@example.com&l
 
 Open an email in an inbox using an email id (marks as read)
 ```bash
-foo@bar:~$ http://localhost:8080/email/open?id=1
+foo@bar:~$ curl http://localhost:8080/email/open?id=1
 ```
 
 Delete email
 ```bash
-foo@bar:~$ http://localhost:8080/email/delete?id=1
+foo@bar:~$ curl http://localhost:8080/email/delete?id=1
 ```
 
 Full-text search subject/body/fromAddress
 ```bash
-foo@bar:~$ localhost:8080/email/inbox/search?emailAddress=bob@example.com&query=lorem&limit=2&page=0
+foo@bar:~$ curl http://localhost:8080/email/inbox/search?emailAddress=bob@example.com&query=lorem&limit=2&page=0
 ```

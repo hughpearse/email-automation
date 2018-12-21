@@ -69,7 +69,7 @@ public class EmailController {
     }
     
     @RequestMapping("/inbox/search")
-    public List<Email> findbyInbox(
+    public List<EmailSummarySubsetProjection> findbyInbox(
     		@RequestParam(value="emailAddress") String emailAddress,
     		@RequestParam(value="query") String query,
     		@RequestParam(value="page", required=false) Optional<Integer> pageOpt,

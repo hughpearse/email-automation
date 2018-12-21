@@ -2,7 +2,6 @@ package myapplication.mailserver;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.james.protocols.api.handler.ProtocolHandler;
 import org.apache.james.protocols.smtp.MailEnvelope;
@@ -19,6 +18,7 @@ import myapplication.mailserver.repo.EmailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -58,7 +58,7 @@ public class SmtpServerConfiguration {
                 	aEmail.setTimestampRecieved(sdf.format(timestamp));
                 	
                 	try {
-                		String rawEmail = IOUtils.toString(mailEnvelope.getMessageInputStream(), Charsets.UTF_8);
+                		String rawEmail = IOUtils.toString(mailEnvelope.getMessageInputStream(), StandardCharsets.UTF_8);
                 		
                 		
                 		Pattern patSub = Pattern.compile(".*Subject:\\s*(.*)");
@@ -87,22 +87,6 @@ public class SmtpServerConfiguration {
                 		String base64RawEmail = new String(encodedBytes);
                 		aEmail.setRawEmail(base64RawEmail);
     					log.info("Base64 email: {}", base64RawEmail);
-    					/*
-    					Received: from localhost (EHLO localhost) ([127.0.0.1])
-    					          by hughs-mbp.mul.ie.ibm.com (Spring Boot SMTP Server) with ESMTP ID -1533514914
-    					          for <kiranreddy2004@gmail.com>;
-    					          Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
-    					Date: Wed, 19 Dec 2018 16:55:51 +0000 (GMT)
-    					From: admin@admin.com
-    					To: kiranreddy2004@gmail.com
-    					Message-ID: <1535660266.0.1545238551385@localhost>
-    					Subject: Test subject
-    					MIME-Version: 1.0
-    					Content-Type: text/plain; charset=UTF-8
-    					Content-Transfer-Encoding: 7bit
-    					
-    					Test mail
-    					 */
     				} catch (IOException e) {
     					e.printStackTrace();
     				}

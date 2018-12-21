@@ -17,4 +17,7 @@ public interface EmailRepository extends JpaRepository<Email, Long>, PagingAndSo
 	@Query(value="SELECT e FROM Email e WHERE inbox_Name = ?1")
 	Page<EmailSummarySubsetProjection> findByInboxNameWithPagination(String emailAddress, Pageable pageable);
 	
+	@Query("SELECT e FROM Email e WHERE e.id = ?1")
+	EmailSummarySubsetProjection findSummaryById(Long id);
+	
 }

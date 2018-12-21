@@ -67,7 +67,7 @@ public class Email implements Serializable {
 	@Column(length = 2000, unique = false)
 	private String rawEmail;
 	@NotNull
-	Boolean isUnread;
+	private Boolean isUnread;
 	
 	protected Email() {}
 	
