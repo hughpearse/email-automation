@@ -33,12 +33,12 @@ public class EmailController {
     
     @RequestMapping("/inbox")
     public Page<EmailSummarySubsetProjection> findbyInbox(
-    		@RequestParam(value="emailAddress") String emailAddress,
+    		@RequestParam(value="inboxName") String emailAddress,
     		@RequestParam(value="page", required=false) Optional<Integer> pageOpt,
     		@RequestParam(value="limit", required=false) Optional<Integer> limitOpt,
     		@RequestParam(value="sort", required=false) Optional<String> sortOpt
     		){
-    	log.info("processing /inbox for: emailAddress={}", emailAddress);
+    	log.info("processing /inbox for: inboxName={}", emailAddress);
     	Integer page = pageOpt.orElse(0);
     	Integer limit = limitOpt.orElse(10);
     	String sortStr = sortOpt.orElse("DESC");
@@ -70,7 +70,7 @@ public class EmailController {
     
     @RequestMapping("/inbox/search")
     public List<EmailSummarySubsetProjection> findbyInbox(
-    		@RequestParam(value="emailAddress") String emailAddress,
+    		@RequestParam(value="inboxName") String emailAddress,
     		@RequestParam(value="query") String query,
     		@RequestParam(value="page", required=false) Optional<Integer> pageOpt,
     		@RequestParam(value="limit", required=false) Optional<Integer> limitOpt
