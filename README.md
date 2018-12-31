@@ -39,3 +39,7 @@ Full-text search subject/body/fromAddress in an inbox (paginated)
 ```bash
 foo@bar:~$ curl http://localhost:8025/email/inbox/search?inboxName=bob@example.com&query=lorem&limit=2&page=0
 ```
+
+You may need to decode the emails. Use one of the following tools:
+* [Base64 Decoder](https://www.base64decode.org/)
+* [Quoted Printable Decoder](https://www.webatic.com/quoted-printable-convertor)
